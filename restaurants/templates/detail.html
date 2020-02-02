@@ -8,7 +8,7 @@
 <div class="card">
   <h5 class="card-header">Restaurant Info</h5>
   {% if restaurant.logo %}
-    <img class="card-img-top" src="{{restaurant.logo.url}}" alt="Hey Noob, look at me...">
+  <img class="card-img-top" src="{{restaurant.logo.url}}" alt="Hey Noob, look at me...">
   {% endif %}
   <div class="card-body">
     <h5 class="card-title">{{restaurant.name}}</h5>
@@ -21,24 +21,28 @@
   </div>
   <ul class="list-group list-group-flush">
     {% for item in items %}
-      <li class="list-group-item">
-        <p><b>{{item.name}}</b></p>
-        <p>{{item.description|linebreaks}}</p>
-        <p>{{item.price}} KWD</p>
-      </li>
+    <li class="list-group-item">
+      <p><b>{{item.name}}</b></p>
+      <p>{{item.description|linebreaks}}</p>
+      <p>{{item.price}} KWD</p>
+    </li>
     {% endfor %}
   </ul>
   <div class="card-body">
     <div class="row text-center">
-        <div class="col-md-4">
-            <a href="{% url 'restaurant-update' restaurant.id %}" class="btn btn-outline-primary btn-block">Update</a>
-        </div>
-        <div class="col-md-4">
-            <a href="{% url 'restaurant-delete' restaurant.id %}" class="btn btn-outline-danger btn-block">Delete</a>
-        </div>
-        <div class="col-md-4">
-            <a href="{% url 'item-create' restaurant.id %}" class="btn btn-outline-success btn-block">Add Item</a>
-        </div>
+      {% if request.user.is_staff or request.user == restaurant.owner %}
+      <div class="col-md-4">
+        <a href="{% url 'restaurant-update' restaurant.id %}" class="btn btn-outline-primary btn-block">Update</a>
+      </div>
+      {% endif %}
+      <div class="col-md-4">
+        {% if request.user.is_staff %}
+        <a href="{% url 'restaurant-delete' restaurant.id %}" class="btn btn-outline-danger btn-block">Delete</a>
+        {% endif %}
+      </div>
+      <div class="col-md-4">
+        <a href="{% url 'item-create' restaurant.id %}" class="btn btn-outline-success btn-block">Add Item</a>
+      </div>
     </div>
   </div>
 </div>
